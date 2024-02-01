@@ -1,26 +1,30 @@
+import { useState } from "react";
+import { BASE_API_URL } from "../../api/BaseURL";
+
 export default function ProductCard({ prod }) {
+  const [loading, setLoading] = useState(false);
+
   const makePayment = async () => {
-    const res = await fetch(
-      "http://localhost:5000/api/payments/create-payment",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          productName: prod.title,
-          productPrice: prod.price,
-          quantity: 1,
-        }),
-      }
-    );
+    setLoading(true);
+    const res = await fetch(`${BASE_API_URL}/payments/create-payment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        productName: prod.title,
+        productPrice: prod.price,
+        quantity: 1,
+      }),
+    });
     const data = await res.json();
+    setLoading(false);
     window.location.replace(data.url);
     console.log(data, "data");
   };
 
   return (
-    <div className="bg-white w-60 min-h-40 shadow rounded p-2 flex flex-col justify-center items-center">
+    <div className="bg-white w-60 min-h-40 shadow-md hover:shadow-xl rounded p-2 flex flex-col justify-center items-center">
       <div className="h-14">{prod.title}</div>
       <div className="w-fit h-40">
         <img
@@ -49,10 +53,12 @@ export default function ProductCard({ prod }) {
         </div>
       </div>
       <div
-        className="bg-primary hover:bg-secondary transition-all duration-300 px-3 py-2 rounded-full text-white text-center cursor-pointer mt-auto mb-2 w-full mx-auto"
+        className={`${
+          loading && "bg-opacity-30 hover:bg-opacity-30 bg-primary"
+        } bg-primary hover:bg-secondary transition-all duration-300 px-3 py-2 rounded-full text-white text-center cursor-pointer mt-auto mb-2 w-full mx-auto`}
         onClick={makePayment}
       >
-        Buy now
+        {loading ? "Redirecting" : " Buy now"}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import TextInput from "../inputs/TextInput";
 import SelectInput from "../inputs/SelectInput";
+import { BASE_API_URL } from "../../api/BaseURL";
 
 export default function StripeSetup({ setShowModal }) {
   const [liveKey, setLiveKey] = useState("");
@@ -12,7 +13,7 @@ export default function StripeSetup({ setShowModal }) {
   let token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoidml2ZWtAZ21haWwuY29tIiwiaWQiOiI2NWJhMTc4ODZlMDA2YzUzYjg2N2M2ZDUifSwiaWF0IjoxNzA2Njk1MDA0fQ.lYdP5pZ3N5YU2j-bKi2qU5F6i-1yGBW2nHk2fbylpB0";
   const fetchStripeData = async () => {
-    const res = await fetch("http://localhost:5000/api/payments/stripe", {
+    const res = await fetch(`${BASE_API_URL}/payments/stripe`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
