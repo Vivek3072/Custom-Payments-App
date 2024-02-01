@@ -6,6 +6,12 @@ const ErrorRespond = require("../helpers/ErrorRespond");
 const generateRandomNum = require("../helpers/generateRandomNum");
 
 class UserController {
+  /**
+   * ROUTE - POST - /api/auth/register
+   * @access - PUBLIC
+   * @param {email, ussername, password} req
+   * @returns {accessToken, email, profilePic, username, _id}
+   */
   static registerUser = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -60,6 +66,12 @@ class UserController {
     } else return ErrorRespond(res, 400, "User data invalid!");
   });
 
+  /**
+   * ROUTE - POST - /api/auth/login
+   * @access - PUBLIC
+   * @param {email, password} req
+   * @returns {accessToken, email, profilePic, username, _id}
+   */
   static loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {

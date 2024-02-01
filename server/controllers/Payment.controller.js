@@ -5,6 +5,17 @@ const Payment = require("../models/payment");
 const stripe = require("stripe")(process.env.STRIPE_TEST_SECRET_KEY);
 require("dotenv");
 
+//@description     Create or fetch One to One Chat
+//@route           POST /api/chat/
+//@access          Protected
+
+/**
+ * A function to check on our server if the stripe server is down
+ * If the stripe server is down we can redirect the user to proceed with razorpay payment gateway
+ * @returns boolean Value
+ * @returns true if stripe server is healthy
+ * @returns false if stripe server is down
+ */
 async function isStripeServiceAccessible() {
   try {
     const response = await fetch("https://api.stripe.com/v1/products", {
@@ -21,6 +32,14 @@ async function isStripeServiceAccessible() {
 }
 
 class PaymentController {
+  /**
+   * ROUTE - POST - /api/payments/create-payment
+   * @access - PUBLIC
+   * @param {productName, productPrice, quantity} req
+   * @returns payments response
+   * @returns {session.url} if the stripe server is healthy
+   * @returns {order_id, key_id, product_name, productPrice, amount, currency} so that the frontend can create a new razorpay payment instance(When stripe is down)
+   */
   static async makePayment(req, res) {
     const { productName, productPrice, quantity } = req.body;
     if (!productName || !productPrice || !quantity)
@@ -110,6 +129,15 @@ class PaymentController {
     }
   }
 
+  /**
+   * ROUTE - POST - /api/payments/webhook
+   * @access - PUBLIC
+   * Webhook implementataion of stripe to update the payments data
+   * @param {payload} req
+   * the payload sent by stripe's webhook
+   * @param {sendStatus} res
+   * @returns status code as per the operation's success or failure
+   */
   static async getPaymentStatus(req, res) {
     try {
       const payload = req.body;
@@ -136,7 +164,14 @@ class PaymentController {
       return ErrorRespond(res, 500, e.message);
     }
   }
-  static async createPayment(req, res) {
+
+  /**
+   * ROUTE - POST - /api/payments/stripe
+   * @access - PRIVATE
+   * @param {stripe_live_key, stripe_private_key, currency, amount} req
+   * @returns success resposne after saving the users stripe's credentials
+   */
+  static async saveStripeData(req, res) {
     try {
       if (!req.body.stripe_live_key || !req.body.stripe_private_key)
         return ErrorRespond(
@@ -167,6 +202,14 @@ class PaymentController {
     }
   }
 
+  /**
+   * ROUTE - GET - /api/payments/stripe
+   * @access - PRIVATE
+   * Find the user and return his stripe's saved credentials from the database
+   * Middleware verifies automatically thet the user is valid
+   * @param {user.id} req
+   * @returns stripes credentials
+   */
   static async getStripeData(req, res) {
     try {
       const data = await Stripe.findOne({ userId: req.user.id });
@@ -175,6 +218,14 @@ class PaymentController {
       return ErrorRespond(res, 500, e.message);
     }
   }
+
+  /**
+   * ROUTE - POST - /api/payments/save-payment
+   * @access - PUBLIC
+   *  This route handles logic for creating successfull payment when its one from razorpay
+   * @param {payment_id, order_id, amount, currency, datetime, payment_provider} req
+   * @returns Success response
+   */
   static async savePayment(req, res) {
     try {
       const {

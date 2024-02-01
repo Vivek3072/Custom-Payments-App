@@ -50,6 +50,7 @@ export default function StripeSetup({ setShowModal }) {
   }, [handleClickOutside]);
 
   const handleStripeData = async () => {
+    // console.log(paymentMethodType, currency, liveKey, privateKey);
     const res = await fetch(`${BASE_API_URL}/payments/stripe`, {
       method: "POST",
       body: JSON.stringify({
@@ -114,10 +115,12 @@ export default function StripeSetup({ setShowModal }) {
             />
             <div className="flex flex-row-reverse">
               <div
-                className="bg-primary rounded px-3 py-2 text-center text-white my-5 cursor-pointer"
+                className={`${
+                  isSavedData && "bg-opacity-20"
+                } bg-primary rounded px-3 py-2 text-center text-white my-5 cursor-pointer`}
                 onClick={handleStripeData}
               >
-                {isSavedData ? "Update Credentials" : "Save Credentials"}
+                {!isSavedData && "Save Credentials"}
               </div>
               <div
                 className="bg-white border-gray-400 border-2 rounded px-3 py-2 text-center text-gray-600 my-5 cursor-pointer mr-2"

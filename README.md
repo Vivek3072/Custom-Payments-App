@@ -4,6 +4,14 @@
 
 ## Setup and Instructions
 
+### Technologies Used
+
+- **Frontend:** React.js, Tailwind CSS
+- **Backend:** Node.js, Express
+- **Database:** MongoDB
+- **Authentication:** JWT (JSON Web Tokens)
+- **Other API's:** fakeStore api to render dummy products
+
 ### Frontend
 
 - From the root directory change the directory to client using "cd client"
@@ -29,13 +37,11 @@
 - If you are logged in and have already saved your cards you can access them also in the payments page
 - You can update your card details also
 
-### Technologies Used
+### Extra Features
 
-- **Frontend:** React.js, Tailwind CSS
-- **Backend:** Node.js, Express
-- **Database:** MongoDB
-- **Authentication:** JWT (JSON Web Tokens)
-- **Other API's:** fakeStore api to render dummy products
+- Developers can add and save their payment configurations(stripe, razorpay credentials) for further use
+- Go to payments page
+- Login or Signup and access all your saved payment cards or add new payment cards
 
 ### Connect with Me
 

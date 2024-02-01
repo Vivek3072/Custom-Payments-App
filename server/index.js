@@ -25,8 +25,8 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: "" }));
 app.use(express.urlencoded({ limit: "", extended: true }));
 
-app.use("/api/auth", authRouter);
-app.use("/api/payments", paymentRouter);
+app.use("/api/auth", authRouter); // This route handles all the logic for onboarding of users(Login or signup)
+app.use("/api/payments", paymentRouter); // This route handles all the login related to payments
 
 app.listen(port, () => {
   console.log(
