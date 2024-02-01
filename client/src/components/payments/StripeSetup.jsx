@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import TextInput from "../inputs/TextInput";
 import SelectInput from "../inputs/SelectInput";
-import { BASE_API_URL } from "../../api/BaseURL";
+import { BASE_API_URL, LOCAL_API_URL } from "../../api/BaseURL";
 import useToken from "../../hooks/useToken";
 
 export default function StripeSetup({ setShowModal }) {
@@ -14,19 +14,26 @@ export default function StripeSetup({ setShowModal }) {
   const { token } = useToken();
 
   const fetchStripeData = async () => {
-    const res = await fetch(`${BASE_API_URL}/payments/stripe`, {
+    const res = await fetch(`${LOCAL_API_URL}/payments/stripe`, {
       method: "GET",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
+    if (!res.ok) {
+      console.log("Failed to fetch");
+      return;
+    }
     const data = await res.json();
+
+    console.log(res, "res");
+    console.log(data, "data");
     if (data) setIsSavedData(true);
     setLiveKey(data.stripe_live_key);
     setPrivateKey(data.stripe_private_key);
     setCurrency(data.currency);
     setPaymentMethodType(data.payment_method_types);
-    console.log(data, "data");
   };
   useEffect(() => {
     fetchStripeData();
@@ -50,18 +57,18 @@ export default function StripeSetup({ setShowModal }) {
   }, [handleClickOutside]);
 
   const handleStripeData = async () => {
-    // console.log(paymentMethodType, currency, liveKey, privateKey);
-    const res = await fetch(`${BASE_API_URL}/payments/stripe`, {
+    console.log(paymentMethodType, currency, liveKey, privateKey);
+    const res = await fetch(`${LOCAL_API_URL}/payments/stripe`, {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         stripe_live_key: liveKey,
         stripe_private_key: privateKey,
         currency: currency,
         payment_method_types: paymentMethodType,
       }),
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
     const data = await res.json();
     if (data) {
