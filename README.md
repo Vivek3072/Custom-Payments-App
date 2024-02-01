@@ -1,20 +1,23 @@
-# Payments app
+# CUSTOM PAYMENTS APP MODULE
 
 ### Project URL - https://payments-frontend.onrender.com
 
 ## Setup and Instructions
 
 ### Frontend
+
 - From the root directory change the directory to client using "cd client"
 - Install all the dependencies using "npm install"
 - Use command "npm run dev" to start the server
-
+- I have deployed the frontend of this project on render
 
 ### Backend
+
 - From the root directory change the directory to server using "cd server"
 - Install all the dependencies using "npm install"
 - Set Up the .env file taking reference from the .env.example file
 - Use command "npm run dev" to start the server
+- I have deployed the backend of this project on render
 
 ### Features
 
@@ -26,8 +29,19 @@
 - If you are logged in and have already saved your cards you can access them also in the payments page
 - You can update your card details also
 
-### Tech Stack
+### Technologies Used
 
-- For frontend I have used react.js, TailwindCSS
-- Backend is built upon Node.js, Express.js
-- Database : MongoDB
+- **Frontend:** React.js, Tailwind CSS
+- **Backend:** Node.js, Express
+- **Database:** MongoDB
+- **Authentication:** JWT (JSON Web Tokens)
+- **Other API's:** fakeStore api to render dummy products
+
+### Connect with Me
+
+Feel free to connect with me on social media or check out my portfolio website:
+
+- [GitHub](https://github.com/Vivek3072)
+- [LinkedIn](https://www.linkedin.com/in/vivek-srivas/)
+- [Instagram](https://www.instagram.com/vvk_srvstv_/)
+- [Portfolio](https://vivek-srivastava.netlify.app/)
