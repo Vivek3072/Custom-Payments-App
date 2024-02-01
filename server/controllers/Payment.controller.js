@@ -172,17 +172,20 @@ class PaymentController {
    * @returns success resposne after saving the users stripe's credentials
    */
   static async saveStripeData(req, res) {
+    if (!req.body.stripe_live_key || !req.body.stripe_private_key)
+      return ErrorRespond(
+        res,
+        400,
+        "Please provide complete stripe credentials"
+      );
+    if (!req.body.currency)
+      return ErrorRespond(res, 400, "Please provide currency");
+    if (!req.body.payment_method_types)
+      return ErrorRespond(res, 400, "Please provide your payment method");
+
     try {
-      if (!req.body.stripe_live_key || !req.body.stripe_private_key)
-        return ErrorRespond(
-          res,
-          400,
-          "Please provide complete stripe credentials"
-        );
-      if (!req.body.currency)
-        return ErrorRespond(res, 400, "Please provide currency");
-      if (!req.body.payment_method_types)
-        return ErrorRespond(res, 400, "Please provide your payment method");
+      const savedCard = await Stripe.findOne({ userId: req.user.id });
+      if (savedCard) return ErrorRespond(res, 400, "Card already avilable!");
 
       const date = new Date();
       const stripeData = new Stripe({
@@ -213,7 +216,8 @@ class PaymentController {
   static async getStripeData(req, res) {
     try {
       const data = await Stripe.findOne({ userId: req.user.id });
-      res.status(200).send(data);
+      if (!data) return ErrorRespond(res, 404, "Data not found!");
+      res.status(200).json(data);
     } catch (e) {
       return ErrorRespond(res, 500, e.message);
     }
