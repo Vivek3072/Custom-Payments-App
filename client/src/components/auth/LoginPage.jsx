@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { BASE_API_URL, LOCAL_API_URL } from "../../api/BaseURL";
+import { BASE_API_URL } from "../../api/BaseURL";
 import useToken from "../../hooks/useToken";
 import UserContext from "../../hooks/UserContext";
 
@@ -9,11 +9,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const { token, setToken } = useToken();
+  const { setToken } = useToken();
   const { setUserData } = useContext(UserContext);
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
     const res = await fetch(`${BASE_API_URL}/auth/login`, {
       method: "POST",
       body: JSON.stringify({
@@ -39,10 +42,6 @@ export default function LoginPage() {
       setError(data.message);
     }
   };
-
-  useEffect(() => {
-    console.log("User Logged In!");
-  }, [token, setToken]);
 
   return (
     <>
@@ -87,20 +86,13 @@ export default function LoginPage() {
           {error && (
             <div className="text-m text-red-500 text-center mb-3">{error}</div>
           )}
-          {/* {loading ? (
-              <button
-                type="submit"
-                className="w-full bg-blue-500 bg-opacity-50 text-white py-2 px-4 rounded"
-              >
-                Wait...
-              </button>
-            ) : (
-            )} */}
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            onClick={handleLogin}
+            disabled={loading}
           >
-            Login
+            {loading ? "Wait..." : "Login"}
           </button>
         </form>
       </div>

@@ -49,6 +49,24 @@ export default function StripeSetup({ setShowModal }) {
     };
   }, [handleClickOutside]);
 
+  const handleStripeData = async () => {
+    const res = await fetch(`${BASE_API_URL}/payments/stripe`, {
+      method: "POST",
+      body: JSON.stringify({
+        stripe_live_key: liveKey,
+        stripe_private_key: privateKey,
+        currency: currency,
+        payment_method_types: paymentMethodType,
+      }),
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+    if (data) {
+      alert(data.message);
+    }
+  };
   return (
     <div className="fixed top-0 left-0 w-full h-[100vh] bg-black bg-opacity-30 flex items-center justify-center z-5">
       <div
@@ -95,7 +113,10 @@ export default function StripeSetup({ setShowModal }) {
               setValue={setCurrency}
             />
             <div className="flex flex-row-reverse">
-              <div className="bg-primary rounded px-3 py-2 text-center text-white my-5 cursor-pointer">
+              <div
+                className="bg-primary rounded px-3 py-2 text-center text-white my-5 cursor-pointer"
+                onClick={handleStripeData}
+              >
                 {isSavedData ? "Update Credentials" : "Save Credentials"}
               </div>
               <div

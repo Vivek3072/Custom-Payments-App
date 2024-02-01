@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import useToken from "../../hooks/useToken";
-import { BASE_API_URL, LOCAL_API_URL } from "../../api/BaseURL";
+import { BASE_API_URL } from "../../api/BaseURL";
 import UserContext from "../../hooks/UserContext";
 
 const Register = () => {
@@ -18,7 +18,7 @@ const Register = () => {
   const handleRegister = async () => {
     // e.preventDefault();
     setLoading(true);
-    const res = await fetch(`${LOCAL_API_URL}/auth/register`, {
+    const res = await fetch(`${BASE_API_URL}/auth/register`, {
       method: "POST",
       body: JSON.stringify({
         username: username,
@@ -102,6 +102,8 @@ const Register = () => {
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring"
+          disabled={loading}
+          onClick={handleRegister}
         >
           {!loading ? "Register" : "Wait..."}
         </button>
