@@ -2,9 +2,17 @@ const mongoose = require("mongoose");
 
 const paymentSchema = new mongoose.Schema(
   {
-    stripe_payment_id: {
+    payment_id: {
       type: String,
-      // required: true,
+      required: true,
+    },
+    order_id: {
+      type: String,
+      required: true,
+    },
+    payment_provider: {
+      type: String,
+      required: true,
     },
     amount_subtotal: {
       type: Number,

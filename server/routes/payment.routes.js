@@ -13,4 +13,5 @@ router.route("/stripe").post(ValidateToken, PaymentController.createPayment);
 //
 router.route("/stripe").get(ValidateToken, PaymentController.getStripeData);
 
+router.route("/save-payment").post(PaymentController.savePayment)
 module.exports = router;

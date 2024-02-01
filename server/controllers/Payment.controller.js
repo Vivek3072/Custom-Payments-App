@@ -5,11 +5,6 @@ const Payment = require("../models/payment");
 const stripe = require("stripe")(process.env.STRIPE_TEST_SECRET_KEY);
 require("dotenv");
 
-const razorpayInstance = new Razorpay({
-  key_id: process.env.RAZORPAY_ID_KEY,
-  key_secret: process.env.RAZORPAY_SECRET_KEY,
-});
-
 async function isStripeServiceAccessible() {
   try {
     const response = await fetch("https://api.stripe.com/v1/products", {
@@ -32,7 +27,6 @@ class PaymentController {
       return ErrorRespond(res, 404, "Please provide product details!");
     try {
       const isStripe = await isStripeServiceAccessible();
-      console.log(isStripe, "isStripe");
 
       //Handles the payment with STRIPE
       if (isStripe) {
@@ -55,24 +49,33 @@ class PaymentController {
           success_url: `${process.env.UI_ROOT_URI}/#/payments/success`,
           cancel_url: `${process.env.UI_ROOT_URI}/#/payments/cancel`,
         });
-        // console.log(session, "session");
+        console.log(session, "session");
         if (session.url) {
           const newPayment = await Payment.create({
-            stripe_payment_id: session.id,
+            payment_id: session.id,
+            order_id: session.id,
             amount_subtotal: session.amount_subtotal / 100,
             payment_status: session.payment_status,
             datetime: session.created,
+            payment_provider: "stripe",
           });
           await newPayment.save();
 
           return res.json({
+            payment_method: "stripe",
             message: "payment_session_created",
             url: session.url,
           });
         }
       } else {
         // HANDLES THE PAYMENT WITH RAZORPAY IN CASE STRIPE IS NOT WORKING
+        const razorpayInstance = new Razorpay({
+          key_id: process.env.RAZORPAY_ID_KEY,
+          key_secret: process.env.RAZORPAY_SECRET_KEY,
+        });
+
         const options = {
+          amount: productPrice * 100,
           currency: "INR",
           receipt: "razorUser@gmail.com",
         };
@@ -93,6 +96,7 @@ class PaymentController {
               ...order,
             });
           } else {
+            console.log(err, "err");
             return ErrorRespond(
               res,
               400,
@@ -167,6 +171,33 @@ class PaymentController {
     try {
       const data = await Stripe.findOne({ userId: req.user.id });
       res.status(200).send(data);
+    } catch (e) {
+      return ErrorRespond(res, 500, e.message);
+    }
+  }
+  static async savePayment(req, res) {
+    try {
+      const {
+        payment_id,
+        order_id,
+        amount,
+        payment_status,
+        datetime,
+        payment_provider,
+      } = req.body;
+
+      const payment = new Payment.create({
+        payment_id: payment_id,
+        order_id: order_id,
+        amount_subtotal: amount,
+        payment_status: payment_status,
+        datetime: datetime,
+        payment_provider: payment_provider,
+      });
+      await payment.save();
+      res
+        .send(201)
+        .json({ message: `Payment completed with ${payment_provider}` });
     } catch (e) {
       return ErrorRespond(res, 500, e.message);
     }
