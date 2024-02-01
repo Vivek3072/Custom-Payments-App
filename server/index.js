@@ -15,7 +15,7 @@ const corsOptions = {
     process.env.UI_ROOT_URI,
     "http://localhost:3000",
     "http://localhost:5173",
-    // deployed frontend url to add here
+    "https://payments-frontend.onrender.com",
   ],
   credentials: true,
   optionSuccessStatus: 200,
