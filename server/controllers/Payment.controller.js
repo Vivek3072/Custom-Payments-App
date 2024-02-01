@@ -52,8 +52,8 @@ class PaymentController {
             },
           ],
 
-          success_url: `${process.env.UI_ROOT_URI}/#/payment/success`,
-          cancel_url: `${process.env.UI_ROOT_URI}/#/payment/cancel`,
+          success_url: `${process.env.UI_ROOT_URI}/#/payments/success`,
+          cancel_url: `${process.env.UI_ROOT_URI}/#/payments/cancel`,
         });
         // console.log(session, "session");
         if (session.url) {

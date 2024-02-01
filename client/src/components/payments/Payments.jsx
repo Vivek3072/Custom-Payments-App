@@ -1,3 +1,4 @@
+import Header from "../header/Header";
 import PaymentModes from "./PaymentModes";
 
 const modes = [
@@ -17,14 +18,17 @@ const modes = [
 
 export default function Payments() {
   return (
-    <div className="bg-white w-[90vw] md:w-[70%] shadow rounded p-2 my-[2rem] mx-auto">
-      <div className="px-3 my-2 font-medium text-2xl">
-        Set up your Payment Method
+    <>
+      <Header />
+      <div className="bg-white w-[90vw] md:w-[70%] shadow rounded p-2 my-[2rem] mx-auto">
+        <div className="px-3 my-2 font-medium text-2xl">
+          Set up your Payment Method
+        </div>
+        {modes &&
+          modes.map((mode, idx) => {
+            return <PaymentModes mode={mode} key={idx} />;
+          })}
       </div>
-      {modes &&
-        modes.map((mode, idx) => {
-          return <PaymentModes mode={mode} key={idx} />;
-        })}
-    </div>
+    </>
   );
 }
