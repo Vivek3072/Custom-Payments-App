@@ -35,7 +35,6 @@ class UserController {
     const newUser = await User.create({
       username,
       email,
-      following: [],
       password: hashedPassword,
       profilePic: `https://xsgames.co/randomusers/assets/avatars/pixel/${randomNumber}.jpg`,
     });
@@ -43,7 +42,7 @@ class UserController {
       const accessToken = jwt.sign(
         {
           user: {
-            username: newUser.username,
+            email: newUser.email,
             id: newUser._id,
           },
         },
@@ -55,6 +54,7 @@ class UserController {
         _id: newUser._id,
         email: newUser.email,
         username: newUser.username,
+        profilePic: newUser.profilePic,
         accessToken: accessToken,
       });
     } else return ErrorRespond(res, 400, "User data invalid!");
@@ -82,9 +82,13 @@ class UserController {
         process.env.ACCESS_TOKEN_SECRET
         // { expiresIn: "1h" }
       );
-      res
-        .status(200)
-        .json({ email: user.email, userId: user._id, accessToken });
+      res.status(200).json({
+        _id: user._id,
+        email: user.email,
+        username: user.username,
+        profilePic: user.profilePic,
+        accessToken,
+      });
     } else {
       return ErrorRespond(res, 401, "Incorrect password!");
     }

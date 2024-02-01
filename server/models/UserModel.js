@@ -5,7 +5,6 @@ const userSchema = mongoose.Schema(
     username: {
       type: String,
       required: [true, "Please add the user name"],
-      unique: [true, "Username already taken"],
     },
     profilePic: {
       type: String,
