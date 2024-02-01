@@ -1,8 +1,20 @@
 import { useState } from "react";
-import { BASE_API_URL } from "../../api/BaseURL";
+import { BASE_API_URL, LOCAL_API_URL } from "../../api/BaseURL";
+import RenderRazorpay from "../payments/razorpay/RenderRazorpay";
 
 export default function ProductCard({ prod }) {
   const [loading, setLoading] = useState(false);
+  const [openRazorpay, setOpenRazorpay] = useState(false);
+  const [razorpayDetails, setRazorpayDetails] = useState({
+    keyId: "",
+    amount: "",
+    currency: "",
+    product_name: "",
+    description: "",
+    order_id: "",
+    contact: "",
+    name: "",
+  });
 
   const makePayment = async () => {
     setLoading(true);
@@ -19,7 +31,21 @@ export default function ProductCard({ prod }) {
     });
     const data = await res.json();
     setLoading(false);
-    window.location.replace(data.url);
+    if (data.payment_method === "stripe") window.location.replace(data.url);
+    else {
+      setOpenRazorpay(true);
+      setRazorpayDetails({
+        ...razorpayDetails,
+        keyId: data.key_id,
+        amount: data.amount,
+        currency: data.currency,
+        product_name: data.product_name,
+        description: data.description,
+        order_id: data.order_id,
+        contact: data.contact,
+        name: data.name,
+      });
+    }
     console.log(data, "data");
   };
 
@@ -58,8 +84,10 @@ export default function ProductCard({ prod }) {
         } bg-primary hover:bg-secondary transition-all duration-300 px-3 py-2 rounded-full text-white text-center cursor-pointer mt-auto mb-2 w-full mx-auto`}
         onClick={makePayment}
       >
-        {loading ? "Redirecting" : " Buy now"}
+        {loading ? "Processing..." : " Buy now"}
       </div>
+
+      {openRazorpay && <RenderRazorpay razorpayDetails={razorpayDetails} />}
     </div>
   );
 }

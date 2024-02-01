@@ -1,6 +1,5 @@
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { FiSearch } from "react-icons/fi";
-import Menu1 from "../../assets/menu/Menu1.svg";
 import Menu2 from "../../assets/menu/Menu2.svg";
 
 export default function Header() {
@@ -13,16 +12,15 @@ export default function Header() {
           <span className="ml-1">How it works!</span>
         </div>
       </div>
-      <div className="col-span-1 flex flex-row items-center p-2 bg-black/95 rounded-lg text-black/50">
+      <div className="hidden md:flex col-span-1 flex-row items-center p-2 bg-black/95 rounded-lg text-black/50">
         <FiSearch />
         <input
           type="text"
-          placeholder="Search features, tutorials, etc."
+          placeholder="Search here..."
           className="w-full bg-black/95 focus:outline-none ml-2"
         />
       </div>
       <div className="col-span-1 flex flex-row items-center space-x-2 ml-auto">
-        <img src={Menu1} alt="" className="w-[40px] h-[40px]" />
         <img src={Menu2} alt="" className="w-[40px] h-[40px]" />
       </div>
     </div>

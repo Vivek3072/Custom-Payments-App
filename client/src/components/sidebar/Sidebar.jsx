@@ -19,17 +19,14 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="bg-secondary h-screen px-1 py-2 gap-[24px]">
+    <div className="bg-secondary h-fit md:h-screen lg:h-screen px-1 py-2 gap-[24px]">
       <div className="flex flex-row justify-between items-center px-[12px] py-1 mb-[24px]">
-        <div className="flex flex-row items-center gap-[12px]">
-          <div className="text-2xl text-white font-semibold">Appleute</div>
-        </div>
-        <div>
-          <IoIosArrowDown color="white" size={20} />
+        <div className="flex flex-row items-center md:gap-[12px]">
+          <div className="text-xl text-white font-semibold">Payments App</div>
         </div>
       </div>
       {/* ________ */}
-      <ul className="flex flex-col">
+      <ul className="flex flex-row md:flex-col">
         {items?.map((item, idx) => (
           <Link
             to={item.linkTo}
@@ -47,7 +44,7 @@ export default function Sidebar() {
         ))}
       </ul>
 
-      <div className="bg-[#353C53] mx-2 rounded p-2 flex flex-row items-center absolute bottom-2 left-1">
+      <div className="bg-[#353C53] mx-2 rounded p-2 flex flex-row items-center hidden md:flex md:absolute bottom-2 left-1">
         <div className="h-full rounded bg-white bg-opacity-10 p-1 mr-1">
           <CiWallet className="text-[30px] font-medium" color="white" />
         </div>
