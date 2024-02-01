@@ -7,18 +7,21 @@ import Payments from "./components/payments/Payments.jsx";
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import Success from "./components/payments/status/Success.jsx";
 import Failure from "./components/payments/status/Failure.jsx";
+import UserProvider from "./layout/ContextLayout.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Router>
-      <AppLayout>
-        <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/payments" element={<Payments />} />
-          <Route path="/payments/success" element={<Success />} />
-          <Route path="/payments/cancel" element={<Failure />} />
-        </Routes>
-      </AppLayout>
+      <UserProvider>
+        <AppLayout>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/payments" element={<Payments />} />
+            <Route path="/payments/success" element={<Success />} />
+            <Route path="/payments/cancel" element={<Failure />} />
+          </Routes>
+        </AppLayout>
+      </UserProvider>
     </Router>
   </React.StrictMode>
 );

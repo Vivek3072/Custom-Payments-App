@@ -1,13 +1,13 @@
 import { useState } from "react";
-import PaymentContext from "../hooks/PaymentContext";
+import UserContext from "../hooks/UserContext";
 
-export default function ContextLayout({ children }) {
-  const [stripeData, setStripeData] = useState([]);
+export default function UserProvider({ children }) {
+  const [userData, setUserData] = useState({});
   return (
     <div>
-      <PaymentContext.Provider value={(stripeData, setStripeData)}>
+      <UserContext.Provider value={(userData, setUserData)}>
         {children}
-      </PaymentContext.Provider>
+      </UserContext.Provider>
     </div>
   );
 }
