@@ -127,7 +127,7 @@ class PaymentController {
 
       await payment.updateOne({ payment_status: paymentStatus });
 
-      res.sendStatus(200).send("order Confirmed!");
+      res.sendStatus(200);
     } catch (e) {
       return ErrorRespond(res, 500, e.message);
     }
