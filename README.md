@@ -37,6 +37,8 @@
 - If you are logged in and have already saved your cards you can access them also in the payments page
 - You can update your card details also
 
+**Note - You can use CARD NUMBER - 4242 4242 4242 4242, and any other suitable Dates and CVV in test mode to test payments on stripe**
+
 ### Extra Features
 
 - Developers can add and save their payment configurations(stripe, razorpay credentials) for further use
